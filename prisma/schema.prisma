@@ -16,7 +16,7 @@ model User {
   email String  @unique
   senha String
   meta Meta[]
-
+  jogadores Jogador[]
   @@map("users")
 }
 
@@ -38,6 +38,38 @@ model Participante {
   resultado Float
   meta    Meta?    @relation(fields: [metaId], references: [id])
   metaId Int 
-
+  jogadores Jogador[]
+  resultados Resultado[]
   @@map("participantes")
+}
+
+
+model Jogador {
+  id    Int     @default(autoincrement()) @id
+  nome String
+  senha String
+  user    User?    @relation(fields: [userId], references: [id])
+  userId Int 
+  participante    Participante[]
+
+  resultado Resultado[]
+
+
+  @@map("jogadores")
+}
+
+model Resultado {
+  id    Int     @default(autoincrement()) @id
+  valor Float
+  mes Int
+  ano Int
+  createdAt DateTime @default(now())
+
+  participante    Participante?    @relation(fields: [participanteId], references: [id])
+  participanteId Int 
+
+  jogador    Jogador?    @relation(fields: [jogadorId], references: [id])
+  jogadorId Int 
+
+  @@map("resultados")
 }
